@@ -12,23 +12,48 @@ class SnowReport extends Component {
     snowToday: 0,
     lastupdated: 0
   };
+
   render() {
     return (
       <React.Fragment>
         <div class="card">
-          <img class="card-img-top" src="https://www.skistar.com/no/om-skistar/snobakke-og-heisinfo/" alt="Card image cap"/>
+          <img
+            class="card-img-top"
+            src="https://www.skistar.com/no/om-skistar/snobakke-og-heisinfo/"
+            alt="Card image cap"
+          />
           <div class="card-body">
             <h4 class="card-title">{this.state.name}</h4>
-            <h6 class="card-subtitle mb-2 text-muted">{this.state.powderAlarm === true ? "Powderalarm!" : ""}</h6>
-            <span>{"Resort name: " + this.state.name} <br/> </span>
-            <span>{"Powder Alarm: " + this.state.powderAlarm} <br/> </span>
-            <span>{"Snow Today: " + this.state.snowToday} <br/> </span>
-            <span>{"Snow slope top: " + this.state.snowSlopeTop} <br/> </span>
-            <span>{"Snow terrain top: " + this.state.snowTerrainTop} <br/> </span>
-            <span>{"Snow slope bottom: " + this.state.snowSlopeTop} <br/> </span>
-            <span>{"Snow terrain bottom: " + this.state.snowTerrainBottom} <br/> </span>
-            <span>{"Last updated: " + this.state.lastupdated} <br/> </span>            
-            <a href="#!" class="btn btn-primary">Go somewhere</a>
+            <h6 class="card-subtitle mb-2 text-muted">
+              {this.state.powderAlarm === true ? "Powderalarm!" : ""}
+            </h6>
+            <span>
+              {"Resort name: " + this.state.name} <br />{" "}
+            </span>
+            <span>
+              {"Powder Alarm: " + this.state.powderAlarm} <br />{" "}
+            </span>
+            <span>
+              {"Snow Today: " + this.state.snowToday} <br />{" "}
+            </span>
+            <span>
+              {"Snow slope top: " + this.state.snowSlopeTop} <br />{" "}
+            </span>
+            <span>
+              {"Snow terrain top: " + this.state.snowTerrainTop} <br />{" "}
+            </span>
+            <span>
+              {"Snow slope bottom: " + this.state.snowSlopeTop} <br />{" "}
+            </span>
+            <span>
+              {"Snow terrain bottom: " + this.state.snowTerrainBottom} <br />{" "}
+            </span>
+            <span>
+              {"Last updated: " + this.state.lastupdated} <br />{" "}
+            </span>
+            <a href="#!" class="btn btn-primary">
+              Go somewhere
+            </a>
           </div>
         </div>
       </React.Fragment>
