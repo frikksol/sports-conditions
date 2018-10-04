@@ -9,7 +9,7 @@ import {
   Tooltip
 } from "recharts";
 
-class KiteReport extends Component {
+class YrWindReport extends Component {
   state = {
     spotId: 3,
     name: 0,
@@ -31,26 +31,12 @@ class KiteReport extends Component {
           <Tooltip />
           <Line
             type="monotone"
-            dataKey="windMin"
+            dataKey="windSpeed"
             stackId="1"
             stroke="#004D00"
             fill="#FFFFFF"
           />
-          <Line
-            type="monotone"
-            dataKey="windAvg"
-            stackId="1"
-            stroke="#004D00"
-            fill="#009900"
-          />
-          <Line
-            type="monotone"
-            dataKey="windMax"
-            stackId="1"
-            stroke="#004D00"
-            fill="#009900"
-          />
-          <YAxis type="number" domain={["dataMin", 1]} />
+          <YAxis type="number" domain={["dataMin", "dataMax"]} />
         </LineChart>
       </React.Fragment>
     );
@@ -66,31 +52,35 @@ class KiteReport extends Component {
       url:
         "http://www.whateverorigin.org/get?url=" +
         encodeURIComponent(
-          "http://vindsiden.no/xml.aspx?id=" + this.state.spotId + "&callback=?"
+          "https://www.yr.no/place/Norway/Buskerud/Hurum/Verket/forecast.xml"
         ),
       dataType: "jsonp",
       success: function(data) {
-        let XMLParser = require("react-xml-parser");
-        let xml = new XMLParser().parseFromString(data.contents.toString());
+        let fs = require("fs");
+        let parse = require("xml-parser");
+        let inspect = require("util").inspect;
+
+        let xml = parse(data.contents.toString());
+        let weatherData = xml.root.children[5].children[1].children;
         console.log(xml);
-        console.log(xml.children[1]);
-        console.log(xml.children.length);
 
         let tempData = [];
         let i;
-        for (i = xml.children.length - 1; i > 0; i--) {
+        var regex = /(\d\d)/g;
+        for (i = 0; i < weatherData.length; i++) {
+          let month = weatherData[i].attributes.from.match(regex)[2];
+          let day = weatherData[i].attributes.from.match(regex)[3];
+          console.log(month);
           tempData.push({
-            time: xml.children[i].children[2].value,
-            windMin: xml.children[i].children[7].value,
-            windAvg: xml.children[i].children[3].value,
-            windMax: xml.children[i].children[6].value,
-            windDirection: xml.children[i].children[8].value,
-            temp: xml.children[i].children[11].value
+            time: day + "." + month,
+            windSpeed: weatherData[i].children[3].attributes.mps,
+            windDirection: weatherData[i].children[2].attributes.deg,
+            temp: weatherData[i].children[4].attributes.value
           });
         }
 
         this.setState({
-          name: xml.name,
+          name: xml.root.children[0].children[0].content,
           windData: tempData
         });
       }.bind(this)
@@ -98,4 +88,4 @@ class KiteReport extends Component {
   }
 }
 
-export default KiteReport;
+export default YrWindReport;

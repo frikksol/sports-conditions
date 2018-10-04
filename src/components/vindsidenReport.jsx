@@ -9,7 +9,7 @@ import {
   Tooltip
 } from "recharts";
 
-class KiteReport extends Component {
+class VindsidenReport extends Component {
   state = {
     spotId: 3,
     name: 0,
@@ -98,4 +98,4 @@ class KiteReport extends Component {
   }
 }
 
-export default KiteReport;
+export default VindsidenReport;
