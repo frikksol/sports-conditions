@@ -16,10 +16,15 @@ class VindsidenReport extends Component {
     windData: []
   };
 
+  constructor(props) {
+    super(props);
+    this.state.spotId = props.spotId;
+  }
+
   render() {
     return (
       <React.Fragment>
-        <h4>{this.state.name}</h4>
+        <h4>{"Windreport from vindsiden"}</h4>
         <LineChart
           width={800}
           height={300}
@@ -64,20 +69,22 @@ class VindsidenReport extends Component {
   getAllArrowImages() {
     let returnValue = [];
     for (let i = 0; i < this.state.windData.length; i++) {
-      if (i == 0) {
+      if (i === 0) {
         returnValue.push(
           this.getRotatedArrowImage(
             this.state.windData[i].windDirection,
-            46,
-            -7.2
+            -25,
+            -7.2,
+            i
           )
         );
-      } else if (i == this.state.windData.length - 1) {
+      } else if (i === this.state.windData.length - 1) {
         returnValue.push(
           this.getRotatedArrowImage(
             this.state.windData[i].windDirection,
             -7.2,
-            0
+            0,
+            i
           )
         );
       } else {
@@ -85,7 +92,8 @@ class VindsidenReport extends Component {
           this.getRotatedArrowImage(
             this.state.windData[i].windDirection,
             -7.2,
-            -7.2
+            -7.2,
+            i
           )
         );
       }
@@ -93,7 +101,7 @@ class VindsidenReport extends Component {
     return returnValue;
   }
 
-  getRotatedArrowImage(rotation, marginLeft, marginRight) {
+  getRotatedArrowImage(rotation, marginLeft, marginRight, key) {
     return (
       <img
         style={{
@@ -102,6 +110,8 @@ class VindsidenReport extends Component {
           marginLeft: marginLeft,
           marginRight: marginRight
         }}
+        alt=""
+        key={key}
         src={
           "http://iconshow.me/media/images/ui/ios7-icons/png/16/arrow-left-c.png"
         }

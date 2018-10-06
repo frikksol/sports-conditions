@@ -16,10 +16,15 @@ class YrWindReport extends Component {
     windData: []
   };
 
+  constructor(props) {
+    super(props);
+    this.state.spotId = props.spotId;
+  }
+
   render() {
     return (
       <React.Fragment>
-        <h4>{this.state.name}</h4>
+        <h4>{"Windreport from Yr"}</h4>
         <LineChart
           width={800}
           height={300}
@@ -50,20 +55,22 @@ class YrWindReport extends Component {
   getAllArrowImages() {
     let returnValue = [];
     for (let i = 0; i < this.state.windData.length; i++) {
-      if (i == 0) {
+      if (i === 0) {
         returnValue.push(
           this.getRotatedArrowImage(
             this.state.windData[i].windDirection,
-            46,
-            -2
+            -25,
+            -2,
+            i
           )
         );
-      } else if (i == this.state.windData.length - 1) {
+      } else if (i === this.state.windData.length - 1) {
         returnValue.push(
           this.getRotatedArrowImage(
             this.state.windData[i].windDirection,
             -2.85,
-            0
+            0,
+            i
           )
         );
       } else {
@@ -71,7 +78,8 @@ class YrWindReport extends Component {
           this.getRotatedArrowImage(
             this.state.windData[i].windDirection,
             -2.85,
-            -2.85
+            -2.85,
+            i
           )
         );
       }
@@ -79,8 +87,7 @@ class YrWindReport extends Component {
     return returnValue;
   }
 
-  getRotatedArrowImage(rotation, marginLeft, marginRight) {
-    console.log(rotation);
+  getRotatedArrowImage(rotation, marginLeft, marginRight, key) {
     return (
       <img
         style={{
@@ -89,6 +96,8 @@ class YrWindReport extends Component {
           marginLeft: marginLeft,
           marginRight: marginRight
         }}
+        alt=""
+        key={key}
         src={
           "http://iconshow.me/media/images/ui/ios7-icons/png/16/arrow-left-c.png"
         }
@@ -102,14 +111,11 @@ class YrWindReport extends Component {
       url:
         "http://www.whateverorigin.org/get?url=" +
         encodeURIComponent(
-          "https://www.yr.no/place/Norway/Buskerud/Hurum/Verket/forecast.xml"
+          "https://www.yr.no/place" + this.state.spotId + "/forecast.xml"
         ),
       dataType: "jsonp",
       success: function(data) {
-        let fs = require("fs");
         let parse = require("xml-parser");
-        let inspect = require("util").inspect;
-
         let xml = parse(data.contents.toString());
         let weatherData = xml.root.children[5].children[1].children;
         console.log(xml);
@@ -120,7 +126,6 @@ class YrWindReport extends Component {
         for (i = 0; i < weatherData.length; i++) {
           let month = weatherData[i].attributes.from.match(regex)[2];
           let day = weatherData[i].attributes.from.match(regex)[3];
-          console.log(month);
           tempData.push({
             time: day + "." + month,
             windSpeed: weatherData[i].children[3].attributes.mps,
