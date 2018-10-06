@@ -52,12 +52,61 @@ class VindsidenReport extends Component {
           />
           <YAxis type="number" domain={["dataMin", 1]} />
         </LineChart>
+        {this.getAllArrowImages()}
       </React.Fragment>
     );
   }
 
   componentDidMount() {
     this.getReportFromVindsiden();
+  }
+
+  getAllArrowImages() {
+    let returnValue = [];
+    for (let i = 0; i < this.state.windData.length; i++) {
+      if (i == 0) {
+        returnValue.push(
+          this.getRotatedArrowImage(
+            this.state.windData[i].windDirection,
+            46,
+            -7.2
+          )
+        );
+      } else if (i == this.state.windData.length - 1) {
+        returnValue.push(
+          this.getRotatedArrowImage(
+            this.state.windData[i].windDirection,
+            -7.2,
+            0
+          )
+        );
+      } else {
+        returnValue.push(
+          this.getRotatedArrowImage(
+            this.state.windData[i].windDirection,
+            -7.2,
+            -7.2
+          )
+        );
+      }
+    }
+    return returnValue;
+  }
+
+  getRotatedArrowImage(rotation, marginLeft, marginRight) {
+    return (
+      <img
+        style={{
+          transform: `rotate(${-90 + Math.floor(rotation)}deg)`, //Somehting is wrong with this rotation!
+          padding: 5,
+          marginLeft: marginLeft,
+          marginRight: marginRight
+        }}
+        src={
+          "http://iconshow.me/media/images/ui/ios7-icons/png/16/arrow-left-c.png"
+        }
+      />
+    );
   }
 
   getReportFromVindsiden() {
@@ -73,8 +122,6 @@ class VindsidenReport extends Component {
         let XMLParser = require("react-xml-parser");
         let xml = new XMLParser().parseFromString(data.contents.toString());
         console.log(xml);
-        console.log(xml.children[1]);
-        console.log(xml.children.length);
 
         let tempData = [];
         let i;
