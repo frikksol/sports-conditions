@@ -1,20 +1,28 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import SnowReport from "./components/snowReport";
+import KiteReport from "./components/kiteReport";
 
 class App extends Component {
-  render() {
+  app() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <KiteReport
+          spotName={"Verket"}
+          vindsidenId={3}
+          yrId={"/Norway/Buskerud/Hurum/Verket"}
+        />
+        <KiteReport
+          spotName={"Fuglevik"}
+          vindsidenId={59}
+          yrId={"/Norway/Østfold/Rygge/Fuglevik_båthavn"}
+        />
       </div>
     );
+  }
+
+  render() {
+    return <div className="App">{this.app()}</div>;
   }
 }
 
