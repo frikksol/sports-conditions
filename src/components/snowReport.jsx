@@ -20,7 +20,7 @@ class SnowReport extends Component {
           <img
             class="card-img-top"
             src="https://www.skistar.com/no/om-skistar/snobakke-og-heisinfo/"
-            alt="Card image cap"
+            alt=""
           />
           <div class="card-body">
             <h4 class="card-title">{this.state.name}</h4>
