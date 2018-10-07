@@ -71,7 +71,9 @@ class MswReport extends Component {
       url:
         "http://www.whateverorigin.org/get?url=" +
         encodeURIComponent(
-          "http://magicseaweed.com/api/21fc8b77c6694acbc52264fd5223ba68/forecast/?spot_id=" +
+          "http://magicseaweed.com/api/" +
+            process.env.REACT_APP_MSW_API_KEY +
+            "/forecast/?spot_id=" +
             this.state.spotId +
             "&units=eu"
         ),

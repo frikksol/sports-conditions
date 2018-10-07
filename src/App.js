@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-import SnowReport from "./components/snowReport";
 import KiteReport from "./components/kiteReport";
+import SurfReport from "./components/surfReport";
 
 class App extends Component {
   app() {
@@ -16,6 +16,16 @@ class App extends Component {
           spotName={"Fuglevik"}
           vindsidenId={59}
           yrId={"/Norway/Østfold/Rygge/Fuglevik_båthavn"}
+        />
+        <SurfReport
+          spotName={"Karmøy"}
+          mswId={678}
+          yrId={"/Norway/Rogaland/Karmøy/Karmøy"}
+        />
+        <SurfReport
+          spotName={"Ervik"}
+          mswId={1893}
+          yrId={"/Norway/Sogn_og_Fjordane/Selje/Ervik"}
         />
       </div>
     );
