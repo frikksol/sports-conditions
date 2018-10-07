@@ -138,7 +138,9 @@ class VindsidenReport extends Component {
         let i;
         for (i = xml.children.length - 1; i > 0; i--) {
           tempData.push({
-            time: xml.children[i].children[2].value,
+            time: this.getTimeFromDateTimeString(
+              xml.children[i].children[2].value
+            ),
             windMin: xml.children[i].children[7].value,
             windAvg: xml.children[i].children[3].value,
             windMax:
@@ -155,6 +157,13 @@ class VindsidenReport extends Component {
         });
       }.bind(this)
     });
+  }
+
+  getTimeFromDateTimeString(dateTimeString) {
+    var regex = /(\d\d)/g;
+    let hour = dateTimeString.match(regex)[4];
+    let minute = dateTimeString.match(regex)[5];
+    return hour + ":" + minute;
   }
 }
 

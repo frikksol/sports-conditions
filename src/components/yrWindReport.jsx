@@ -122,12 +122,11 @@ class YrWindReport extends Component {
 
         let tempData = [];
         let i;
-        var regex = /(\d\d)/g;
         for (i = 0; i < weatherData.length; i++) {
-          let month = weatherData[i].attributes.from.match(regex)[2];
-          let day = weatherData[i].attributes.from.match(regex)[3];
           tempData.push({
-            time: day + "." + month,
+            time: this.getDateFromDateTimeString(
+              weatherData[i].attributes.from
+            ),
             windSpeed: weatherData[i].children[3].attributes.mps,
             windDirection: weatherData[i].children[2].attributes.deg,
             temp: weatherData[i].children[4].attributes.value
@@ -140,6 +139,13 @@ class YrWindReport extends Component {
         });
       }.bind(this)
     });
+  }
+
+  getDateFromDateTimeString(dateTimeString) {
+    var regex = /(\d\d)/g;
+    let month = dateTimeString.match(regex)[2];
+    let day = dateTimeString.match(regex)[3];
+    return day + "." + month;
   }
 }
 
