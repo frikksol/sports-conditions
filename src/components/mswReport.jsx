@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import $ from "jquery";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import format from "moment";
 
 class MswReport extends Component {
   state = {
@@ -31,18 +32,21 @@ class MswReport extends Component {
           <Bar
             type="monotone"
             dataKey="waveMin"
-            stroke="#004D00"
-            fill="#004D00"
+            stackId="1"
+            stroke="#339933"
+            fill="#339933"
           />
           <Bar
             type="monotone"
             dataKey="waveMax"
-            stroke="#004D00"
-            fill="#004D00"
+            stackId="1"
+            stroke="#9fdf9f"
+            fill="#9fdf9f"
           />
           <Bar
             type="monotone"
             dataKey="swellHeight"
+            stackId="2"
             stroke="#467fdb"
             fill="#467fdb"
           />
@@ -129,9 +133,11 @@ class MswReport extends Component {
         let i;
         for (i = 0; i < jsonData.length; i++) {
           tempData.push({
-            time: jsonData[i].timestamp,
+            time: this.getDateFromUnixTime(jsonData[i].localTimestamp),
             waveMin: jsonData[i].swell.absMinBreakingHeight,
-            waveMax: jsonData[i].swell.absMaxBreakingHeight,
+            waveMax:
+              jsonData[i].swell.absMaxBreakingHeight -
+              jsonData[i].swell.absMinBreakingHeight,
             swellHeight: jsonData[i].swell.components.combined.height,
             swellDirection: jsonData[i].swell.components.primary.direction,
             swellPeriod: jsonData[i].swell.components.combined.period
@@ -144,6 +150,15 @@ class MswReport extends Component {
         });
       }.bind(this)
     });
+  }
+
+  getDateFromUnixTime(unixTime) {
+    var timeString = new Date(unixTime * 1000);
+    var formatted = timeString.toISOString();
+    var regex = /(\d\d)/g;
+    let month = formatted.match(regex)[2];
+    let day = formatted.match(regex)[3];
+    return day + "." + month;
   }
 }
 
