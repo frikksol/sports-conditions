@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import $ from "jquery";
 import {
-  LineChart,
+  ComposedChart,
   Line,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -25,7 +26,7 @@ class VindsidenReport extends Component {
     return (
       <React.Fragment>
         <h4>{"Windreport from vindsiden"}</h4>
-        <LineChart
+        <ComposedChart
           width={800}
           height={300}
           data={this.state.windData}
@@ -34,7 +35,7 @@ class VindsidenReport extends Component {
           <CartesianGrid strokeDasharray="10 10" />
           <XAxis dataKey="time" />
           <Tooltip />
-          <Line
+          <Area
             type="monotone"
             dataKey="windMin"
             stackId="1"
@@ -44,11 +45,11 @@ class VindsidenReport extends Component {
           <Line
             type="monotone"
             dataKey="windAvg"
-            stackId="1"
+            stackId="2"
             stroke="#004D00"
             fill="#009900"
           />
-          <Line
+          <Area
             type="monotone"
             dataKey="windMax"
             stackId="1"
@@ -56,7 +57,7 @@ class VindsidenReport extends Component {
             fill="#009900"
           />
           <YAxis type="number" domain={["dataMin", 1]} />
-        </LineChart>
+        </ComposedChart>
         {this.getAllArrowImages()}
       </React.Fragment>
     );
@@ -140,7 +141,9 @@ class VindsidenReport extends Component {
             time: xml.children[i].children[2].value,
             windMin: xml.children[i].children[7].value,
             windAvg: xml.children[i].children[3].value,
-            windMax: xml.children[i].children[6].value,
+            windMax:
+              xml.children[i].children[6].value -
+              xml.children[i].children[7].value,
             windDirection: xml.children[i].children[8].value,
             temp: xml.children[i].children[11].value
           });
