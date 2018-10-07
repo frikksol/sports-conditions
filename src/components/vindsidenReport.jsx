@@ -9,6 +9,7 @@ import {
   CartesianGrid,
   Tooltip
 } from "recharts";
+import DirectionalArrows from "./directionalArrows";
 
 class VindsidenReport extends Component {
   state = {
@@ -23,6 +24,9 @@ class VindsidenReport extends Component {
   }
 
   render() {
+    if (this.state.windData.length === 0) {
+      return <div />;
+    }
     return (
       <React.Fragment>
         <h4>{"Windreport from vindsiden"}</h4>
@@ -58,66 +62,13 @@ class VindsidenReport extends Component {
           />
           <YAxis type="number" domain={["dataMin", 1]} />
         </ComposedChart>
-        {this.getAllArrowImages()}
+        <DirectionalArrows initialRotation={-90} data={this.state.windData} />
       </React.Fragment>
     );
   }
 
   componentDidMount() {
     this.getReportFromVindsiden();
-  }
-
-  getAllArrowImages() {
-    let returnValue = [];
-    for (let i = 0; i < this.state.windData.length; i++) {
-      if (i === 0) {
-        returnValue.push(
-          this.getRotatedArrowImage(
-            this.state.windData[i].windDirection,
-            -25,
-            -7.2,
-            i
-          )
-        );
-      } else if (i === this.state.windData.length - 1) {
-        returnValue.push(
-          this.getRotatedArrowImage(
-            this.state.windData[i].windDirection,
-            -7.2,
-            0,
-            i
-          )
-        );
-      } else {
-        returnValue.push(
-          this.getRotatedArrowImage(
-            this.state.windData[i].windDirection,
-            -7.2,
-            -7.2,
-            i
-          )
-        );
-      }
-    }
-    return returnValue;
-  }
-
-  getRotatedArrowImage(rotation, marginLeft, marginRight, key) {
-    return (
-      <img
-        style={{
-          transform: `rotate(${-90 + Math.floor(rotation)}deg)`, //Somehting is wrong with this rotation!
-          padding: 5,
-          marginLeft: marginLeft,
-          marginRight: marginRight
-        }}
-        alt=""
-        key={key}
-        src={
-          "http://iconshow.me/media/images/ui/ios7-icons/png/16/arrow-left-c.png"
-        }
-      />
-    );
   }
 
   getReportFromVindsiden() {
@@ -132,8 +83,6 @@ class VindsidenReport extends Component {
       success: function(data) {
         let XMLParser = require("react-xml-parser");
         let xml = new XMLParser().parseFromString(data.contents.toString());
-        console.log(xml);
-
         let tempData = [];
         let i;
         for (i = xml.children.length - 1; i > 0; i--) {
@@ -146,7 +95,7 @@ class VindsidenReport extends Component {
             windMax:
               xml.children[i].children[6].value -
               xml.children[i].children[7].value,
-            windDirection: xml.children[i].children[8].value,
+            arrowDirection: Math.floor(xml.children[i].children[8].value),
             temp: xml.children[i].children[11].value
           });
         }

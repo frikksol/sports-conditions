@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip
 } from "recharts";
+import DirectionalArrows from "./directionalArrows";
 
 class YrWindReport extends Component {
   state = {
@@ -22,6 +23,9 @@ class YrWindReport extends Component {
   }
 
   render() {
+    if (this.state.windData.length === 0) {
+      return <div />;
+    }
     return (
       <React.Fragment>
         <h4>{"Windreport from Yr"}</h4>
@@ -43,66 +47,13 @@ class YrWindReport extends Component {
           />
           <YAxis type="number" domain={["dataMin", "dataMax"]} />
         </LineChart>
-        {this.getAllArrowImages()}
+        <DirectionalArrows initialRotation={-90} data={this.state.windData} />
       </React.Fragment>
     );
   }
 
   componentDidMount() {
     this.getReportFromVindsiden();
-  }
-
-  getAllArrowImages() {
-    let returnValue = [];
-    for (let i = 0; i < this.state.windData.length; i++) {
-      if (i === 0) {
-        returnValue.push(
-          this.getRotatedArrowImage(
-            this.state.windData[i].windDirection,
-            -25,
-            -2,
-            i
-          )
-        );
-      } else if (i === this.state.windData.length - 1) {
-        returnValue.push(
-          this.getRotatedArrowImage(
-            this.state.windData[i].windDirection,
-            -2.85,
-            0,
-            i
-          )
-        );
-      } else {
-        returnValue.push(
-          this.getRotatedArrowImage(
-            this.state.windData[i].windDirection,
-            -2.85,
-            -2.85,
-            i
-          )
-        );
-      }
-    }
-    return returnValue;
-  }
-
-  getRotatedArrowImage(rotation, marginLeft, marginRight, key) {
-    return (
-      <img
-        style={{
-          transform: `rotate(${-90 + Math.floor(rotation)}deg)`,
-          padding: 5,
-          marginLeft: marginLeft,
-          marginRight: marginRight
-        }}
-        alt=""
-        key={key}
-        src={
-          "http://iconshow.me/media/images/ui/ios7-icons/png/16/arrow-left-c.png"
-        }
-      />
-    );
   }
 
   getReportFromVindsiden() {
@@ -118,8 +69,6 @@ class YrWindReport extends Component {
         let parse = require("xml-parser");
         let xml = parse(data.contents.toString());
         let weatherData = xml.root.children[5].children[1].children;
-        console.log(xml);
-
         let tempData = [];
         let i;
         for (i = 0; i < weatherData.length; i++) {
@@ -128,7 +77,7 @@ class YrWindReport extends Component {
               weatherData[i].attributes.from
             ),
             windSpeed: weatherData[i].children[3].attributes.mps,
-            windDirection: weatherData[i].children[2].attributes.deg,
+            arrowDirection: weatherData[i].children[2].attributes.deg,
             temp: weatherData[i].children[4].attributes.value
           });
         }
